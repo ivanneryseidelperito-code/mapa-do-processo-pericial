@@ -16,10 +16,20 @@
     "nota": "Valor base da hora técnica divulgada na tabela R$ 259,95, atualizado pelo INPC ref. 10/2026."
   },
   "etapas": [
-    {"descricao": "Análise e programação", "horas": 2},
-    {"descricao": "Diligências", "horas": 0},
-    {"descricao": "Cálculos, Redação e Revisão", "horas": 20}
+    {
+      "descricao": "Análise e programação",
+      "horas": 2
+    },
+    {
+      "descricao": "Diligências",
+      "horas": 0
+    },
+    {
+      "descricao": "Cálculos, Redação e Revisão",
+      "horas": 20
+    }
   ],
   "valor_final": 6500,
-  "ressalva_despesas": true
+  "ressalva_despesas": true,
+  "prazo_dias": 30
 }

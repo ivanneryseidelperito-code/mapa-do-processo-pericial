@@ -8,6 +8,7 @@ Campos do JSON (ver exemplo_dados.json):
   cpf, id_nomeacao, objeto, data (opcional; padrão = hoje),
   vh {valor, fonte_nome, fonte_url, nota}         -> obrigatórios valor, fonte_nome, fonte_url
   etapas [{descricao, horas}]                      -> uma linha da tabela por etapa
+  prazo_dias (prazo estimado para o laudo, em dias)
   valor_final (opcional; gera a linha Desconto/arredondamento)
   ressalva_despesas (bool; padrão true)
 """
@@ -113,6 +114,7 @@ def main():
         "NOTA_VH": " " + (vh.get("nota") or f"Valor da hora técnica adotado: {brl(VH)}, conforme {vh['fonte_nome']} ({vh['fonte_url']})."),
         "TOTAL": brl(total), "TOTAL_TAB": brl(total), "TOTAL_EXTENSO": extenso(total),
         "SUBTOTAL": brl(subtotal), "DESCONTO": brl(desconto), "DATA": data,
+        "PRAZO_DIAS": str(dados.get("prazo_dias") or "[A CONFIRMAR]"),
         "RESSALVA_DESPESAS": RESSALVA if dados.get("ressalva_despesas", True) else "",
     }
 

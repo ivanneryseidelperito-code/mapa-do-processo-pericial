@@ -21,12 +21,12 @@ git clone --depth 1 https://github.com/ivanneryseidelperito-code/mapa-do-process
 python3 /tmp/mpp/proposta-honorarios-periciais/scripts/gerar_proposta.py dados.json Proposta_Honorarios_<proc>.docx
 ```
 - `modelo/modelo_proposta_honorarios.docx` preserva o layout do perito: A4; margens sup. 3 cm, esq. 3 cm, inf. 2 cm, dir. 2 cm; cabeçalho com logotipo "Ivan Seidel — Perito Contábil e Financeiro"; rodapé verde com contatos e paginação "Pág. x-y"; corpo em Dupincel Text, títulos de seção em Segoe UI negrito 13 pt; quadro de partes em negrito itálico; caixa cinza com valor e extenso; tabela de etapas em 10 pt; alíneas a), b)… automáticas; controles de conteúdo vinculados às propriedades do documento (processo, partes, cidade).
-- Estrutura fixa do modelo: Endereçamento → Processo/Autor/Réu → Qualificação do perito → I – Da Nomeação → II – Dos Honorários (fatores; alíneas a–d; caixa de valor; tabela Descrição | Horas | Valor-hora * | Valor; nota de rodapé do valor-hora) → ressalva de quesitos suplementares (CPC 469; NBC PP 01 R2, item 37) e de despesas (item 35) → III – Dos Pedidos (homologação; depósito, CPC 82 e 95; levantamento de 50%, CPC 465 §4º; NBC PP 01 R2, item 38) → fecho, local/data, assinatura.
+- Estrutura fixa do modelo (aderente à NBC PP 01 R2): Endereçamento → Processo/Autor/Réu → Qualificação do perito → I – Da Nomeação (aceite, item 19; inexistência de impedimento/suspeição, CPC 144, 145 e 148 e itens 14 e 16; juntada da Certidão de Regularidade Profissional, item 5) → II – Dos Honorários (17 fatores do item 32; alíneas a–d; fonte do valor-hora, item 33; caixa de valor; planejamento até a homologação, item 34, e tabela Descrição | Horas | Valor-hora * | Valor; nota de rodapé do valor-hora) → ressalvas de quesitos suplementares (CPC 469; item 37) e de despesas (item 35) → prazo estimado (CPC 465 e 476; itens 24 e 27) → III – Dos Pedidos (a: homologação após intimação das partes, CPC 465 §3º; b: depósito, CPC 82 e 95; c: levantamento de 50%, CPC 465 §4º e item 38; d: fixação do prazo) → fecho, local/data, assinatura.
 - Proibido: recriar o documento com python-docx/docx-js, trocar fontes, margens, cabeçalho, rodapé ou ordem das seções. Se o repositório estiver inacessível, solicitar ao perito o anexo do modelo e usar `--modelo <arquivo>`.
 - Se o perito enviar nova versão do seu layout: gerar novo modelo com marcadores (mesmos nomes `{{...}}`), substituir no repositório e registrar no §8.
 
 ## 2. Contexto (C) — extrair do mapa para o JSON
-`juizo`, `cidade`, `processo`, `parte1_qualif`/`parte1_nome`, `parte2_qualif`/`parte2_nome`, `id_nomeacao` (Id. e página da decisão), `objeto` (complemento de "aspectos técnicos relativos a …"), `cpf` (somente se informado pelo perito; ausente → `[CPF]`), `data` (opcional). Para dimensionar horas: nº de folhas, quesitos (juízo/autor/réu), meses do período, contratos/competências, documentos faltantes, diligências externas, justiça gratuita.
+`juizo`, `cidade`, `processo`, `parte1_qualif`/`parte1_nome`, `parte2_qualif`/`parte2_nome`, `id_nomeacao` (Id. e página da decisão), `objeto` (complemento de "aspectos técnicos relativos a …"), `cpf` (somente se informado pelo perito; ausente → `[CPF]`), `prazo_dias` (prazo estimado para o laudo, compatível com as horas; ausente → `[A CONFIRMAR]`), `data` (opcional). Para dimensionar horas: nº de folhas, quesitos (juízo/autor/réu), meses do período, contratos/competências, documentos faltantes, diligências externas, justiça gratuita.
 Exemplo completo: `exemplo_dados.json`.
 
 ## 3. Valor-hora (VH) — regra obrigatória por proposta
@@ -65,7 +65,7 @@ Papel ATJ/ATE: o modelo é de perito do juízo; para assistente técnico ou trab
 - Nenhum `[A CONFIRMAR]`/`[CPF]` oculto: listar no resumo.
 
 ## 6. Entrega
-Enviar o .docx com SendUserFile. No chat: linhas da tabela (horas), FC, VH + fonte, subtotal, desconto, total, pendências. Nada além.
+Enviar o .docx com SendUserFile. No chat: linhas da tabela (horas), FC, VH + fonte, subtotal, desconto, total, prazo, pendências — incluindo, sempre, o lembrete de anexar a Certidão de Regularidade Profissional atualizada (NBC PP 01 R2, item 5). Nada além.
 
 ## 7. Protocolo de autoaprendizado
 Acionado quando o perito criticar, corrigir ou informar resultado (ex.: "horas de cálculo ficaram baixas", "o juiz reduziu", "gastei 30 h").
@@ -80,3 +80,4 @@ Acionado quando o perito criticar, corrigir ou informar resultado (ex.: "horas d
 Formato: `RA-nn | data | natureza da ação | crítica | regra adotada | seção alterada`
 - RA-01 | 25/11/2026 | geral | proposta deve seguir o layout tipográfico próprio do perito | geração exclusiva por preenchimento do modelo (§1) | §1, §0
 - RA-02 | 25/11/2026 | geral | valor-hora e respectiva fonte variam por proposta | VH e link informados pelo perito a cada proposta; vedada estimativa própria (§3) | §3
+- RA-03 | 25/11/2026 | geral | modelo deve contemplar todos os tópicos da NBC PP 01 (R2) aplicáveis à proposta | inclusão no modelo de: impedimento/suspeição, certidão de regularidade, 17 fatores do item 32, planejamento até a homologação, complementação justificada de quesitos, prazo e pedidos correspondentes | §1, §2, §6
