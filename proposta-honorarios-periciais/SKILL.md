@@ -1,0 +1,82 @@
+---
+name: proposta-honorarios-periciais
+description: Elabora proposta de honorários periciais contábeis em Word, no layout tipográfico próprio do perito (NBC PP 01 R2, CPC 465), a partir do Mapa do Processo; usar logo após o mapa pericial ou quando pedirem orçamento/proposta de honorários.
+---
+
+# Proposta de Honorários Periciais (método CLARA — fase 1)
+
+Ativação: imediatamente após a skill `mapa-do-processo-pericial`, ou quando o perito pedir "proposta de honorários", "orçamento da perícia", "estimativa de horas".
+Saída única: `Proposta_Honorarios_<nº processo>.docx` gerado sobre o MODELO TIPOGRÁFICO DO PERITO + quadro-resumo no chat (máx. 10 linhas).
+
+## 0. Regras de economia de tokens (obrigatórias)
+- Fonte primária = Mapa do Processo já elaborado. NÃO reler os autos; consultar PDF só para lacuna específica (página pontual).
+- Não transcrever o mapa nem a proposta no chat. Não explicar a norma ao usuário.
+- Não redigir o documento: preencher o modelo com `scripts/gerar_proposta.py` a partir de um JSON. Correções = alterar o JSON e regerar.
+- Perguntas: no máximo 1 rodada, só para o que impede a fixação do valor (valor-hora + link da fonte; papel do perito). Demais lacunas → `[A CONFIRMAR]` no JSON.
+
+## 1. Modelo tipográfico (obrigatório — não alterar)
+Repositório: `https://github.com/ivanneryseidelperito-code/mapa-do-processo-pericial`, pasta `proposta-honorarios-periciais/`.
+```
+git clone --depth 1 https://github.com/ivanneryseidelperito-code/mapa-do-processo-pericial /tmp/mpp
+python3 /tmp/mpp/proposta-honorarios-periciais/scripts/gerar_proposta.py dados.json Proposta_Honorarios_<proc>.docx
+```
+- `modelo/modelo_proposta_honorarios.docx` preserva o layout do perito: A4; margens sup. 3 cm, esq. 3 cm, inf. 2 cm, dir. 2 cm; cabeçalho com logotipo "Ivan Seidel — Perito Contábil e Financeiro"; rodapé verde com contatos e paginação "Pág. x-y"; corpo em Dupincel Text, títulos de seção em Segoe UI negrito 13 pt; quadro de partes em negrito itálico; caixa cinza com valor e extenso; tabela de etapas em 10 pt; alíneas a), b)… automáticas; controles de conteúdo vinculados às propriedades do documento (processo, partes, cidade).
+- Estrutura fixa do modelo: Endereçamento → Processo/Autor/Réu → Qualificação do perito → I – Da Nomeação → II – Dos Honorários (fatores; alíneas a–d; caixa de valor; tabela Descrição | Horas | Valor-hora * | Valor; nota de rodapé do valor-hora) → ressalva de quesitos suplementares (CPC 469; NBC PP 01 R2, item 37) e de despesas (item 35) → III – Dos Pedidos (homologação; depósito, CPC 82 e 95; levantamento de 50%, CPC 465 §4º; NBC PP 01 R2, item 38) → fecho, local/data, assinatura.
+- Proibido: recriar o documento com python-docx/docx-js, trocar fontes, margens, cabeçalho, rodapé ou ordem das seções. Se o repositório estiver inacessível, solicitar ao perito o anexo do modelo e usar `--modelo <arquivo>`.
+- Se o perito enviar nova versão do seu layout: gerar novo modelo com marcadores (mesmos nomes `{{...}}`), substituir no repositório e registrar no §8.
+
+## 2. Contexto (C) — extrair do mapa para o JSON
+`juizo`, `cidade`, `processo`, `parte1_qualif`/`parte1_nome`, `parte2_qualif`/`parte2_nome`, `id_nomeacao` (Id. e página da decisão), `objeto` (complemento de "aspectos técnicos relativos a …"), `cpf` (somente se informado pelo perito; ausente → `[CPF]`), `data` (opcional). Para dimensionar horas: nº de folhas, quesitos (juízo/autor/réu), meses do período, contratos/competências, documentos faltantes, diligências externas, justiça gratuita.
+Exemplo completo: `exemplo_dados.json`.
+
+## 3. Valor-hora (VH) — regra obrigatória por proposta
+- Em CADA proposta o perito informa: (a) o valor-hora adotado; (b) o link do sítio onde o valor é divulgado (tabela de honorários de entidade de classe ou equivalente). Opcional: valor-base e índice de atualização para a nota de rodapé.
+- JSON: `vh.valor`, `vh.fonte_nome` (ex.: "SESCAP/BA"), `vh.fonte_url`, `vh.nota` (ex.: "Valor base da hora técnica divulgada na tabela R$ 259,95, atualizado pelo INPC ref. 10/2026.").
+- Sem valor E link: não gerar a proposta; solicitar ambos (o script recusa a execução).
+- Não pesquisar, estimar, reaproveitar de proposta anterior ou atualizar o VH por conta própria. Conferir o link (WebFetch) somente se o perito solicitar.
+- O link é citado no corpo (alínea c) e o valor/base na nota de rodapé — evidenciação dos critérios de formação do preço (NBC PP 01 R2, item 33).
+
+## 4. Análise (A) — estimativa de horas
+Horas por etapa = base + acréscimos (parâmetros calibráveis pelo §7; não normativos):
+
+| Etapa | Base (h) | Acréscimos |
+|---|---|---|
+| E1 Exame dos autos e planejamento | 3 | +1 h/200 fls acima de 300 |
+| E2 Diligências e solicitação de documentos (CPC 473 §3º) | 2 | +2 h/diligência externa; +1 h se documentos faltantes |
+| E3 Análise documental e conferência | 4 | +1 h/12 meses; +1 h/contrato adicional |
+| E4 Cálculos e planilhas | 6 | +1 h/12 competências; +2 h/cenário alternativo; +2 h se índices/juros com marco legal múltiplo |
+| E5 Laudo e respostas aos quesitos (CPC 473) | 4 | +0,5 h/quesito |
+| E6 Revisão técnica | 2 | +10% de (E3+E4+E5) |
+| E7 Esclarecimentos (CPC 477 §2º) — reserva | 3 | +1 h se quesitos > 20 |
+
+Fator de complexidade FC (NBC PP 01 R2, item 32 — relevância, vulto, risco, complexidade): 1,00 | 1,15 | 1,30 | 1,50. Horas de cada linha × FC, arredondadas a 0,5 h.
+Linhas da tabela do modelo (`etapas` no JSON), salvo instrução diversa do perito:
+- "Análise e programação" = E1
+- "Diligências" = E2 (omitir a linha se 0 h e não houver diligência prevista)
+- "Cálculos, Redação e Revisão" = E3 + E4 + E5 + E6 + E7
+`valor_final` (opcional): informado pelo perito para arredondamento/desconto; o script gera a linha "Desconto/arredondamento". Sem ele, total = subtotal e a linha é suprimida.
+Justiça gratuita: observar os limites da Res. CNJ 232/2016 (estadual), Res. CJF 305/2014 (federal) ou CLT art. 790-B (trabalho) e sinalizar ao perito antes de gerar.
+Papel ATJ/ATE: o modelo é de perito do juízo; para assistente técnico ou trabalho extrajudicial, gerar com o mesmo modelo e sinalizar `[A CONFIRMAR]` nas seções I e III (contrato de prestação de serviços — NBC PP 01 R2, item 36).
+
+## 5. Ajuste (A) — checagem antes de entregar
+- O script valida: VH com fonte, ausência de marcadores não preenchidos, subtotal ≥ valor final, extenso. Não refazer contas manualmente.
+- Converter para PDF (`soffice --headless --convert-to pdf`) e inspecionar visualmente a página 1 e a tabela: quebras, alinhamentos, linha de local/data.
+- Fundamentos citados existentes e correspondentes; NBC PP 01 (R2) de 20/02/2025 (DOU 14/03/2025).
+- Nenhum `[A CONFIRMAR]`/`[CPF]` oculto: listar no resumo.
+
+## 6. Entrega
+Enviar o .docx com SendUserFile. No chat: linhas da tabela (horas), FC, VH + fonte, subtotal, desconto, total, pendências. Nada além.
+
+## 7. Protocolo de autoaprendizado
+Acionado quando o perito criticar, corrigir ou informar resultado (ex.: "horas de cálculo ficaram baixas", "o juiz reduziu", "gastei 30 h").
+1. Corrigir o documento atual (JSON → regerar).
+2. Converter a crítica em regra geral, verificável e curta (1 linha), indicando a seção afetada.
+3. Horas realizadas × estimadas: ajustar o parâmetro da etapa por média ponderada (70% atual, 30% observado).
+4. Chamar `propose_skills` (kind: improvement, target: proposta-honorarios-periciais) com `edits` que alterem a regra/parâmetro e acrescentem linha ao §8. O perito aprova no cartão; sem aprovação, nada é alterado.
+5. Após aprovação, se o perito pedir, sincronizar a SKILL.md no repositório GitHub (commit na pasta `proposta-honorarios-periciais/`).
+6. Não registrar dados identificáveis das partes; apenas natureza da ação e aprendizado.
+
+## 8. Registro de Aprendizado
+Formato: `RA-nn | data | natureza da ação | crítica | regra adotada | seção alterada`
+- RA-01 | 25/11/2026 | geral | proposta deve seguir o layout tipográfico próprio do perito | geração exclusiva por preenchimento do modelo (§1) | §1, §0
+- RA-02 | 25/11/2026 | geral | valor-hora e respectiva fonte variam por proposta | VH e link informados pelo perito a cada proposta; vedada estimativa própria (§3) | §3

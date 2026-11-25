@@ -1,0 +1,25 @@
+{
+  "juizo": "Douto Juízo de Direito da 1ª Vara Cível",
+  "cidade": "Porto Alegre",
+  "processo": "0000000-00.0000.8.21.0001",
+  "parte1_qualif": "Autor:",
+  "parte1_nome": "NOME DA PARTE AUTORA",
+  "parte2_qualif": "Réu:",
+  "parte2_nome": "NOME DA PARTE RÉ",
+  "cpf": "",
+  "id_nomeacao": "000000000 – Pág. 1",
+  "objeto": "cálculos periciais em ação revisional de contrato bancário",
+  "vh": {
+    "valor": 393.83,
+    "fonte_nome": "SESCAP/BA",
+    "fonte_url": "www.sescapbahia.org.br/docs/honorarios.pdf",
+    "nota": "Valor base da hora técnica divulgada na tabela R$ 259,95, atualizado pelo INPC ref. 10/2026."
+  },
+  "etapas": [
+    {"descricao": "Análise e programação", "horas": 2},
+    {"descricao": "Diligências", "horas": 0},
+    {"descricao": "Cálculos, Redação e Revisão", "horas": 20}
+  ],
+  "valor_final": 6500,
+  "ressalva_despesas": true
+}
