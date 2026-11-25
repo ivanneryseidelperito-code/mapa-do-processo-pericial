@@ -17,19 +17,42 @@
   },
   "etapas": [
     {
-      "descricao": "Análise e programação",
-      "horas": 2
+      "descricao": "Exame dos autos e planejamento",
+      "horas": 3,
+      "atividades": "Leitura da petição inicial, da contestação, das decisões e dos quesitos formulados, com delimitação do objeto da perícia e definição dos procedimentos a serem aplicados."
     },
     {
-      "descricao": "Diligências",
-      "horas": 0
+      "descricao": "Diligências e solicitação de documentos",
+      "horas": 2,
+      "atividades": "Elaboração de termo de diligência para requisição dos documentos necessários não constantes dos autos, nos termos do art. 473, § 3º, do CPC, com comunicação prévia aos assistentes técnicos."
     },
     {
-      "descricao": "Cálculos, Redação e Revisão",
-      "horas": 20
+      "descricao": "Análise documental",
+      "horas": 4,
+      "atividades": "Exame dos contratos, extratos e demonstrativos juntados, com conferência da consistência dos dados e identificação das cláusulas e encargos pactuados."
+    },
+    {
+      "descricao": "Cálculos e planilhas",
+      "horas": 8,
+      "atividades": "Elaboração das planilhas de recálculo da evolução contratual, com aplicação dos critérios fixados nos autos e apuração das eventuais diferenças."
+    },
+    {
+      "descricao": "Elaboração do laudo e respostas aos quesitos",
+      "horas": 6,
+      "atividades": "Redação do Laudo Pericial Contábil, com os requisitos do art. 473 do CPC, e resposta fundamentada a cada quesito formulado."
+    },
+    {
+      "descricao": "Revisão técnica",
+      "horas": 2,
+      "atividades": "Revisão integral dos cálculos, das respostas e da fundamentação normativa, para controle de qualidade do trabalho."
+    },
+    {
+      "descricao": "Esclarecimentos",
+      "horas": 3,
+      "atividades": "Reserva técnica para prestação de esclarecimentos sobre o laudo, nos termos do art. 477, § 2º, do CPC."
     }
   ],
-  "valor_final": 6500,
+  "valor_final": null,
   "ressalva_despesas": true,
   "prazo_dias": 30
 }

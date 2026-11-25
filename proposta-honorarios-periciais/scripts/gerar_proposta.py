@@ -7,7 +7,7 @@ Campos do JSON (ver exemplo_dados.json):
   juizo, cidade, processo, parte1_qualif, parte1_nome, parte2_qualif, parte2_nome,
   cpf, id_nomeacao, objeto, data (opcional; padrão = hoje),
   vh {valor, fonte_nome, fonte_url, nota}         -> obrigatórios valor, fonte_nome, fonte_url
-  etapas [{descricao, horas}]                      -> uma linha da tabela por etapa
+  etapas [{descricao, horas, atividades}]          -> um parágrafo de planejamento e uma linha do quadro por etapa
   prazo_dias (prazo estimado para o laudo, em dias)
   valor_final (opcional; gera a linha Desconto/arredondamento)
   ressalva_despesas (bool; padrão true)
@@ -134,6 +134,18 @@ def main():
                 for r in t.findall(q("tr")):
                     if "{{DESCONTO}}" in "".join(x.text or "" for x in r.iter(q("t"))):
                         t.remove(r)
+    # bloco de planejamento: um parágrafo por etapa (título em negrito + atividades)
+    for proto in [p for p in doc.iter(q("p")) if "{{PLAN_TITULO}}" in "".join(t.text or "" for t in p.iter(q("t")))]:
+        blank = proto.getprevious(); ant = proto
+        for n, e in enumerate(dados["etapas"], 1):
+            if not e.get("atividades"):
+                sys.exit("ERRO: etapa '%s' sem descrição das atividades (campo atividades)." % e["descricao"])
+            novo = copy.deepcopy(proto)
+            sub_tokens_xml(novo, {"PLAN_TITULO": "Etapa %d – %s:" % (n, e["descricao"]), "PLAN_DESC": e["atividades"].strip()})
+            if n > 1:
+                b = copy.deepcopy(blank); ant.addnext(b); ant = b
+            ant.addnext(novo); ant = novo
+        proto.getparent().remove(proto)
     sub_tokens_xml(doc, mapa)
     parts["word/document.xml"] = etree.tostring(doc, xml_declaration=True, encoding="UTF-8", standalone=True)
     fn = etree.fromstring(parts["word/footnotes.xml"]); sub_tokens_xml(fn, mapa)
