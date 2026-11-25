@@ -12,7 +12,7 @@ Saída única: `Proposta_Honorarios_<nº processo>.docx` gerado sobre o MODELO T
 - Fonte primária = Mapa do Processo já elaborado. NÃO reler os autos; consultar PDF só para lacuna específica (página pontual).
 - Não transcrever o mapa nem a proposta no chat. Não explicar a norma ao usuário.
 - Não redigir o documento: preencher o modelo com `scripts/gerar_proposta.py` a partir de um JSON. Correções = alterar o JSON e regerar.
-- Perguntas: no máximo 1 rodada, só para o que impede a fixação do valor (papel do perito; o valor-hora tem padrão no §3). Demais lacunas → `[A CONFIRMAR]` no JSON.
+- Perguntas: no máximo 1 rodada, só para o que impede a fixação do valor (papel do perito; valor-hora + link quando o processo não for do TJRS — §3). Demais lacunas → `[A CONFIRMAR]` no JSON.
 
 ## 1. Modelo tipográfico (obrigatório — não alterar)
 Repositório: `https://github.com/ivanneryseidelperito-code/mapa-do-processo-pericial`, pasta `proposta-honorarios-periciais/`.
@@ -30,10 +30,11 @@ python3 /tmp/mpp/proposta-honorarios-periciais/scripts/gerar_proposta.py dados.j
 `etapas`: lista `[{descricao, horas, atividades}]` (ver §4).
 Exemplo completo: `exemplo_dados.json`.
 
-## 3. Valor-hora (VH) — padrão do perito
-- **VH padrão (definido pelo perito em 25/11/2026): R$ 900,00 — FECONTABIL — https://www.fecontabil.org.br/pdfs/Tabela_de_Honorarios.pdf.** Usar sempre, sem perguntar, salvo se o perito informar outro valor/fonte na proposta em curso (o informado prevalece só naquela proposta).
-- JSON padrão: `"vh": {"valor": 900.00, "fonte_nome": "FECONTABIL", "fonte_url": "https://www.fecontabil.org.br/pdfs/Tabela_de_Honorarios.pdf", "nota": "Valor da hora técnica de referência divulgado na Tabela de Honorários da FECONTABIL."}`.
-- O VH padrão só muda por instrução expressa do perito (atualizar esta seção e o §8).
+## 3. Valor-hora (VH) — padrão por tribunal
+- **TJRS (CNJ com segmento `.8.21.`): VH padrão R$ 900,00 — FECONTABIL — https://www.fecontabil.org.br/pdfs/Tabela_de_Honorarios.pdf** (definido pelo perito em 25/11/2026). Usar sem perguntar, salvo se o perito informar outro valor/fonte na proposta em curso.
+- JSON padrão TJRS: `"vh": {"valor": 900.00, "fonte_nome": "FECONTABIL", "fonte_url": "https://www.fecontabil.org.br/pdfs/Tabela_de_Honorarios.pdf", "nota": "Valor da hora técnica de referência divulgado na Tabela de Honorários da FECONTABIL."}`.
+- **Demais tribunais:** o VH padrão NÃO se aplica. O perito informa (a) o valor-hora e (b) o link da fonte; sem ambos, não gerar a proposta (o script recusa a execução).
+- Identificar o tribunal pelo nº CNJ (J.TR: 8.21 = TJRS). Padrões só mudam por instrução expressa do perito (atualizar esta seção e o §8).
 - Não pesquisar, estimar ou atualizar o VH por conta própria. Conferir o link (WebFetch) somente se o perito solicitar.
 - O link é citado no corpo (alínea c) e o valor/base na nota de rodapé — evidenciação dos critérios de formação do preço (NBC PP 01 R2, item 33).
 
@@ -89,4 +90,4 @@ Formato: `RA-nn | data | natureza da ação | crítica | regra adotada | seção
 - RA-02 | 25/11/2026 | geral | valor-hora e respectiva fonte variam por proposta | VH e link informados pelo perito a cada proposta; vedada estimativa própria (§3) | §3
 - RA-03 | 25/11/2026 | geral | modelo deve contemplar todos os tópicos da NBC PP 01 (R2) aplicáveis à proposta | inclusão no modelo de: impedimento/suspeição, certidão de regularidade, 17 fatores do item 32, planejamento até a homologação, complementação justificada de quesitos, prazo e pedidos correspondentes | §1, §2, §6
 - RA-04 | 25/11/2026 | geral | planejamento deve ser elaborado pela skill, etapa por etapa, antes do quadro-resumo | parágrafo por etapa (título + atividades específicas do caso) e quadro com uma linha por etapa; colunas renomeadas | §1, §2, §4
-- RA-05 | 25/11/2026 | geral | valor-hora não deve ser informado a cada proposta | VH padrão R$ 900,00 (FECONTABIL, link no §3), substituível só por instrução expressa | §0, §3
+- RA-05 | 25/11/2026 | geral | valor-hora não deve ser informado a cada proposta, mas o padrão vale só para o TJRS | VH padrão R$ 900,00 (FECONTABIL) apenas para processos do TJRS (8.21); demais tribunais seguem exigindo VH + link | §0, §3
