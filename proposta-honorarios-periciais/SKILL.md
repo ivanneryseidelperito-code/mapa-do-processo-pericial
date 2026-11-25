@@ -12,7 +12,7 @@ Saída única: `Proposta_Honorarios_<nº processo>.docx` gerado sobre o MODELO T
 - Fonte primária = Mapa do Processo já elaborado. NÃO reler os autos; consultar PDF só para lacuna específica (página pontual).
 - Não transcrever o mapa nem a proposta no chat. Não explicar a norma ao usuário.
 - Não redigir o documento: preencher o modelo com `scripts/gerar_proposta.py` a partir de um JSON. Correções = alterar o JSON e regerar.
-- Perguntas: no máximo 1 rodada, só para o que impede a fixação do valor (valor-hora + link da fonte; papel do perito). Demais lacunas → `[A CONFIRMAR]` no JSON.
+- Perguntas: no máximo 1 rodada, só para o que impede a fixação do valor (papel do perito; o valor-hora tem padrão no §3). Demais lacunas → `[A CONFIRMAR]` no JSON.
 
 ## 1. Modelo tipográfico (obrigatório — não alterar)
 Repositório: `https://github.com/ivanneryseidelperito-code/mapa-do-processo-pericial`, pasta `proposta-honorarios-periciais/`.
@@ -30,11 +30,11 @@ python3 /tmp/mpp/proposta-honorarios-periciais/scripts/gerar_proposta.py dados.j
 `etapas`: lista `[{descricao, horas, atividades}]` (ver §4).
 Exemplo completo: `exemplo_dados.json`.
 
-## 3. Valor-hora (VH) — regra obrigatória por proposta
-- Em CADA proposta o perito informa: (a) o valor-hora adotado; (b) o link do sítio onde o valor é divulgado (tabela de honorários de entidade de classe ou equivalente). Opcional: valor-base e índice de atualização para a nota de rodapé.
-- JSON: `vh.valor`, `vh.fonte_nome` (ex.: "SESCAP/BA"), `vh.fonte_url`, `vh.nota` (ex.: "Valor base da hora técnica divulgada na tabela R$ 259,95, atualizado pelo INPC ref. 10/2026.").
-- Sem valor E link: não gerar a proposta; solicitar ambos (o script recusa a execução).
-- Não pesquisar, estimar, reaproveitar de proposta anterior ou atualizar o VH por conta própria. Conferir o link (WebFetch) somente se o perito solicitar.
+## 3. Valor-hora (VH) — padrão do perito
+- **VH padrão (definido pelo perito em 25/11/2026): R$ 900,00 — FECONTABIL — https://www.fecontabil.org.br/pdfs/Tabela_de_Honorarios.pdf.** Usar sempre, sem perguntar, salvo se o perito informar outro valor/fonte na proposta em curso (o informado prevalece só naquela proposta).
+- JSON padrão: `"vh": {"valor": 900.00, "fonte_nome": "FECONTABIL", "fonte_url": "https://www.fecontabil.org.br/pdfs/Tabela_de_Honorarios.pdf", "nota": "Valor da hora técnica de referência divulgado na Tabela de Honorários da FECONTABIL."}`.
+- O VH padrão só muda por instrução expressa do perito (atualizar esta seção e o §8).
+- Não pesquisar, estimar ou atualizar o VH por conta própria. Conferir o link (WebFetch) somente se o perito solicitar.
 - O link é citado no corpo (alínea c) e o valor/base na nota de rodapé — evidenciação dos critérios de formação do preço (NBC PP 01 R2, item 33).
 
 ## 4. Análise (A) — estimativa de horas
@@ -89,3 +89,4 @@ Formato: `RA-nn | data | natureza da ação | crítica | regra adotada | seção
 - RA-02 | 25/11/2026 | geral | valor-hora e respectiva fonte variam por proposta | VH e link informados pelo perito a cada proposta; vedada estimativa própria (§3) | §3
 - RA-03 | 25/11/2026 | geral | modelo deve contemplar todos os tópicos da NBC PP 01 (R2) aplicáveis à proposta | inclusão no modelo de: impedimento/suspeição, certidão de regularidade, 17 fatores do item 32, planejamento até a homologação, complementação justificada de quesitos, prazo e pedidos correspondentes | §1, §2, §6
 - RA-04 | 25/11/2026 | geral | planejamento deve ser elaborado pela skill, etapa por etapa, antes do quadro-resumo | parágrafo por etapa (título + atividades específicas do caso) e quadro com uma linha por etapa; colunas renomeadas | §1, §2, §4
+- RA-05 | 25/11/2026 | geral | valor-hora não deve ser informado a cada proposta | VH padrão R$ 900,00 (FECONTABIL, link no §3), substituível só por instrução expressa | §0, §3
