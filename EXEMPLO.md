@@ -1,0 +1,5 @@
+# Exemplo validado — Mapa do Processo (eproc, TJMG, cumprimento de sentença contra município)
+
+Referência de formato para a skill `mapa-do-processo-pericial`. Consultar só em caso de dúvida.
+
+Classe "Cumprimento de Sentença"; rótulos Exequente/Executado; fase Liquidação. Ajuizamento "25/01/2024 – Ev. 1 – fl. 3"; Citação "05/02/2024 – Ev. 9 – fl. 86" (mandado em imagem, data da separação); AJG "Sim – Ev. 5 – fl. 75"; Trânsito "21/11/2024 – Ev. 32 – fl. 137"; Sentença "Ev. 28 – fl. 122"; ED/Acórdão/STJ "Não houve". Deferimento e Requisitante "Juízo, de ofício – Ev. 104 – fl. 288". Quesitos do exequente 18, "Ev. 115 – fl. 320-322"; executado e Juízo em branco. Nomeação "Ev. 118 – fl. 329"; Prazo "Ev. 116 – fl. 326". Honorários: Fls. "Ev. 104 – fl. 288", Valor em branco. Advogado do exequente sem contato nos autos (telefone da procuração era da parte); procuradora municipal com e-mail institucional. Histórico com 17 linhas (inicial e anexos, petições sobre marco inicial, pedido de cumprimento, impugnação — com nº de processo divergente registrado na linha —, resposta, Contadoria, decisão que remeteu critérios à perícia).
